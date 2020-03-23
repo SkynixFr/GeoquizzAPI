@@ -15,8 +15,10 @@ $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 
 // Création des routes à travers les méthodes d'un controller
-$app->get('/hello/{name}', \player\geoquizz\controller\PlayerController::class . ':getTest');
-$app->get('/', \player\geoquizz\controller\PlayerController::class . ':getParties');
+$app->get('/parties', \player\geoquizz\controller\PlayerController::class . ':getParties');
+$app->get('/partie/{id}', \player\geoquizz\controller\PlayerController::class . ':getPartie');
 $app->post('/partie[/]', \player\geoquizz\controller\PlayerController::class . ':addPartie');
+$app->post('/partie/{id}', \player\geoquizz\controller\PlayerController::class . ':updatePartie');
+$app->delete('/partie/{id}', \player\geoquizz\controller\PlayerController::class . ':deletePartie');
 $app->run();
 
