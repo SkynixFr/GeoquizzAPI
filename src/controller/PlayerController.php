@@ -63,14 +63,14 @@ class PlayerController {
     */
     public function addPartie(Request $req, Response $resp, array $args) {
         $input = $req->getParsedBody();
-        if(isset($input['nbphotos']) && isset($input['status']) && isset($input['score']) && isset($input['pseudo'])) {
+        if(isset($input['nbphotos']) && isset($input['score']) && isset($input['pseudo'])) {
             try{
                 $partie = new Partie();
                 $partie->id = $partie->gen_uuid();
                 $partie->token = $partie->gen_uuid();
-                $partie->nbphotos = filter_var($input['nbphotos'], FILTER_SANITIZE_NUMBER_INT);
-                $partie->status = filter_var($input['status'], FILTER_SANITIZE_NUMBER_INT);
-                $partie->score = filter_var($input['score'], FILTER_SANITIZE_NUMBER_FLOAT);
+                $partie->nbphotos = 10;
+                $partie->status = 0;
+                $partie->score = 0;
                 $partie->pseudo = filter_var($input['pseudo'], FILTER_SANITIZE_STRING);
                 $partie->saveOrFail();
 
