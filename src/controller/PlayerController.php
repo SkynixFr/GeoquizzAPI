@@ -63,7 +63,7 @@ class PlayerController {
     */
     public function addPartie(Request $req, Response $resp, array $args) {
         $input = $req->getParsedBody();
-        if(isset($input['nbphotos']) && isset($input['score']) && isset($input['pseudo'])) {
+        if(isset($input['pseudo'])) {
             try{
                 $partie = new Partie();
                 $partie->id = $partie->gen_uuid();
