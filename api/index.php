@@ -14,11 +14,15 @@ $configuration = ['settings' => ['displayErrorDetails' => true]];
 $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 
-// Création des routes à travers les méthodes d'un controller
-$app->get('/parties', \player\geoquizz\controller\PlayerController::class . ':getParties');
-$app->get('/partie/{id}', \player\geoquizz\controller\PlayerController::class . ':getPartie');
-$app->post('/partie[/]', \player\geoquizz\controller\PlayerController::class . ':addPartie');
-$app->post('/partie/{id}', \player\geoquizz\controller\PlayerController::class . ':updatePartie');
-$app->delete('/partie/{id}', \player\geoquizz\controller\PlayerController::class . ':deletePartie');
+// Création des routes à travers les méthodes du controller Player
+$app->get('/game/{id}', \player\geoquizz\controller\PlayerController::class . ':getGame');
+$app->post('/game[/]', \player\geoquizz\controller\PlayerController::class . ':addGame');
+$app->post('/game/{id}', \player\geoquizz\controller\PlayerController::class . ':updateGame');
+$app->get('/series[/]', \player\geoquizz\controller\PlayerController::class . ':getSeries');
+$app->get('/serie/{id}/picture', \player\geoquizz\controller\PlayerController::class . ':getPhotosSerie');
+
+
+
+
 $app->run();
 

@@ -2,6 +2,7 @@
 
 namespace player\geoquizz\controller;
 use player\geoquizz\model\Partie;
+use player\geoquizz\model\Serie;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
@@ -9,25 +10,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundExceptio
 class PlayerController {
 
     /* 
-        Recupère toutes les parties de la base de données
-        Retourne une réponse en json
-    */
-    public function getParties(Request $req, Response $resp, array $args) {
-        $parties = Partie::select()->get();
-        $resp = $resp->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-        $resp->getBody()->write(json_encode([
-			'type' => 'collection',
-			'count' => count($parties),
-			'parties' => $parties
-		]));
-    	return $resp;
-    }
-
-    /* 
         Recupère une partie de la base de données
         Retourne une réponse en json
     */
-    public function getPartie(Request $req, Response $resp, array $args){
+    public function getGame(Request $req, Response $resp, array $args){
         $id = $args['id'];
         if(isset($id)){
             try{ 
@@ -61,7 +47,7 @@ class PlayerController {
         Ajoute une partie dans la base de données
         Retourne une réponse en json
     */
-    public function addPartie(Request $req, Response $resp, array $args) {
+    public function addGame(Request $req, Response $resp, array $args) {
         $input = $req->getParsedBody();
         if(isset($input['pseudo'])) {
             try{
@@ -100,37 +86,10 @@ class PlayerController {
     }
 
     /* 
-        Supprime une partie dans la base de données
-    */
-    public function deletePartie(Request $req, Response $resp, array $args) {
-        $id = $args['id'];
-        if(isset($id)){
-            try{ 
-                $partie = Partie::select()->where('id','=', $id)->firstOrFail(); 
-                $partie->delete();
-            }catch(ModelNotFoundException $e){
-                $resp = $resp->withStatus(500)->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $resp->getBody()->write(json_encode([
-                    'type' => 'error',
-                    'error' => 500,
-                    'message' => $e->getMessage()
-                ]));
-            } 
-        }else{
-            $resp = $resp->withStatus(404)->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $resp->getBody()->write(json_encode([
-                'type' => 'error',
-                'error' => 500,
-                'message' => "Donnée non trouvée"
-            ])); 
-        }
-    }
-
-    /* 
         Modifie une partie dans la base de données
         Retourne une réponse en json
     */
-    public function updatePartie(Request $req, Response $resp, array $args) {
+    public function updateGame(Request $req, Response $resp, array $args) {
         $id = $args['id'];
         $partie = Partie::select()->where('id','=', $id)->firstOrFail(); 
         $nbphotos = $partie->nbphotos;
@@ -169,6 +128,55 @@ class PlayerController {
                 'error' => 500,
                 'message' => $e->getMessage()
             ]));
+        }
+        return $resp;
+    }
+    /* 
+        Recupère toutes les séries de la base de données
+        Retourne une réponse en json
+    */
+    public function getSeries(Request $req, Response $resp, array $args) {
+        $series = Serie::select()->get();
+        $resp = $resp->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+        $resp->getBody()->write(json_encode([
+			'type' => 'collection',
+			'count' => count($series),
+			'series' => $series
+		]));
+    	return $resp;
+    }
+   
+    /* 
+        Recupère toutes les photos d'une série de la base de données
+        Retourne une réponse en json
+    */
+    public function getPhotosSerie(Request $req, Response $resp, array $args){
+        $id = $args['id'];
+        if(isset($id)){
+            try{ 
+                $serie = Serie::select()->where('id','=', $id)->firstOrFail();
+                $photosSerie = $serie->photos()->get();
+                $resp = $resp->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $resp->getBody()->write(json_encode([
+                'type' => 'collection',
+                'count' => count($photosSerie),
+                'photos' => $photosSerie
+                ]));  
+            }catch(ModelNotFoundException $e){
+                $resp = $resp->withStatus(500)->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $resp->getBody()->write(json_encode([
+                    'type' => 'error',
+                    'error' => 500,
+                    'message' => $e->getMessage()
+                ]));
+            } 
+        }else{
+            $resp = $resp->withStatus(404)->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $resp->getBody()->write(json_encode([
+                'type' => 'error',
+                'error' => 500,
+                'message' => "Donnée non trouvée"
+            ])); 
         }
         return $resp;
     }
