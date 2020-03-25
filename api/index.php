@@ -15,6 +15,7 @@ $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 
 // Création des routes à travers les méthodes du controller Player
+$app->get('/games[/]', \player\geoquizz\controller\PlayerController::class . ':getGames');
 $app->get('/game/{id}', \player\geoquizz\controller\PlayerController::class . ':getGame');
 $app->post('/game[/]', \player\geoquizz\controller\PlayerController::class . ':addGame');
 $app->post('/game/{id}', \player\geoquizz\controller\PlayerController::class . ':updateGame');

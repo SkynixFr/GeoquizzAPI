@@ -10,6 +10,20 @@ use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundExceptio
 class PlayerController {
 
     /* 
+        Recupère toutes les parties de la base de données
+        Retourne une réponse en json
+    */
+    public function getGames(Request $req, Response $resp, array $args) {
+        $parties = Partie::select()->get();
+        $resp = $resp->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+        $resp->getBody()->write(json_encode([
+			'type' => 'collection',
+			'count' => count($parties),
+			'series' => $parties
+		]));
+    	return $resp;
+    }
+    /* 
         Recupère une partie de la base de données
         Retourne une réponse en json
     */
