@@ -22,8 +22,9 @@ $app->post('/game/{id}', \player\geoquizz\controller\PlayerController::class . '
 $app->get('/series[/]', \player\geoquizz\controller\PlayerController::class . ':getSeries');
 $app->get('/serie/{id}/picture', \player\geoquizz\controller\PlayerController::class . ':getPhotosSerie');
 
-
-
+// Création des routes à travers les méthodes du controller BackOffice
+$app->post('/user[/]', \player\geoquizz\controller\PlayerController::class . ':addUser');
+$app->get('/user/{id}', \player\geoquizz\controller\BackOfficeController::class . ':getUser');
 
 $app->run();
 
