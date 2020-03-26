@@ -106,27 +106,20 @@ class PlayerController {
     public function updateGame(Request $req, Response $resp, array $args) {
         $id = $args['id'];
         $partie = Partie::select()->where('id','=', $id)->firstOrFail(); 
-        $nbphotos = $partie->nbphotos;
         $status = $partie->status;
         $score = $partie->score;
-        $pseudo = $partie->pseudo;
 
         $input = $req->getParsedBody();
-        if(isset($input['nbphotos']) && $input['nbphotos'] != $nbphotos) {
-            $nbphotos = filter_var($input['nbphotos'], FILTER_SANITIZE_NUMBER_INT);
-        }else if(isset($input['status']) && $input['status'] != $status){
+        if(isset($input['status']) && $input['status'] != $status){
             $status = filter_var($input['status'], FILTER_SANITIZE_NUMBER_INT);
-        }else if(isset($input['score']) && $input['score'] != $score) {
-            $score = filter_var($input['score'], FILTER_SANITIZE_NUMBER_FLOAT);
-        }else if(isset($input['pseudo']) && $input['pseudo'] != $pseudo) {
-            $pseudo = filter_var($input['pseudo'], FILTER_SANITIZE_STRING);
+        }
+        if(isset($input['score']) && $input['score'] != $score) {
+            $score = filter_var($input['score'], FILTER_SANITIZE_NUMBER_INT);
         }
 
         try{
-            $partie->nbphotos = $nbphotos;
             $partie->status = $status;
             $partie->score = $score;
-            $partie->pseudo = $pseudo;
             $partie->saveOrFail();
 
             $resp = $resp->withStatus(201)->withHeader('Content-Type', 'application/json;charset=utf-8');
