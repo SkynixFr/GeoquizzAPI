@@ -1,5 +1,7 @@
 # GeoquizzAPI
 
+Projet de la licence professionnelle. L'API a été développé en PHP avec SLIM.
+
 ## Installation
 
 Composer install à l'endroit du composer.json (/src)
